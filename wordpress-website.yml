@@ -1,0 +1,48 @@
+---
+- name: Wordpress Website
+  hosts: localhost
+  connection: local
+  gather_facts: True
+
+  vars:
+    keypair: assignment
+    instance_type: t2.micro
+    image: ami-0e0bf4b3a0c0e0adc
+    wait: yes
+    group: default
+    count: 1
+    region: us-west-1
+    security_group: wp-sg
+    user_data: "{{ lookup('file', 'user-data.sh') }}"
+
+  tasks:
+  - name: Task 1 - Create a Security Group
+    local_action:
+      module: ec2_group
+      name: "{{ security_group }}"
+      description: Security Group for webserver Servers
+      region: "{{ region }}"
+      rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
+
+  - name: Task 2 - Launch EC2 instance
+    local_action:
+      module: ec2
+      group: "{{ security_group }}"
+      instance_type: "{{ instance_type}}"
+      image: "{{ image }}"
+      wait: True
+      region: "{{ region }}"
+      keypair: "{{ keypair }}"
+      count: "{{count}}"
+      user_data: "{{ user_data }}"
