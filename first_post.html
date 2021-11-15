@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+  <head>
+
+    <title>Weather</title>
+
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+
+    <meta content="utf-8" http-equiv="encoding">
+
+  </head>
+
+  <body>
+    <div class="mypanel"></div>
+    <h1> Weather in Chicago, IL USA</h1>
+    <p> Date: <a id="date"></a> </p>
+    
+    <p> Current weather state: <a id="weather_state"><a> </p>
+    
+    <div id="cur"></div>
+    <p> Temperature: <a id="temperature"></a> Centigrade </p>
+    
+    
+
+    <script type="text/javascript">
+      n =  new Date();
+      y = n.getFullYear();
+      m = n.getMonth() + 1;
+      d = n.getDate();
+      document.getElementById("date").innerHTML = y + "/" + m + "/" + d;
+
+      date = y + "/" + m + "/" + d
+      url = "https://www.metaweather.com/api/location/2379574/";
+
+
+      console.log(url)
+      
+
+      let xhr = new XMLHttpRequest();
+
+      xhr.open('GET', url);
+
+      xhr.responseType = 'json';
+
+      xhr.send();
+
+      // the response is {"message": "Hello, world!"}
+      xhr.onload = function() {
+        let responseObj = xhr.response;
+        temperature_v  = responseObj.consolidated_weather[0].the_temp;
+        weather_state_v = responseObj.consolidated_weather[0].weather_state_name;
+        img_v = responseObj.consolidated_weather[0].weather_state_abbr;
+        //console.log(temperature); 
+        //console.log("https://www.metaweather.com/static/img/weather/" + img + ".svg");
+        document.getElementById("weather_state").innerHTML = weather_state_v;
+        document.getElementById("temperature").innerHTML = temperature_v;
+        document.getElementById("cur").innerHTML = '<img src=\'https://www.metaweather.com/static/img/weather/ico/' + img_v + '.ico\'>';
+        };
+
+
+    </script>
+
+
+
+  </body>
+</html>
