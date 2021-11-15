@@ -12,3 +12,9 @@ Requirements:
 aws_access_key_id=<key id>
 aws_secret_access_key=<secret access key>
 ```
+
+Future work:
+CORS
+
+Temporary workaround:
+Using browser plugin "Moesif CORS"
